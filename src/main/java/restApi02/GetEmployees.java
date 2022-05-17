@@ -8,5 +8,10 @@ public class GetEmployees {
 		.when()
 		.get("https://dummy.restapiexample.com/api/v1/employees")
 		.then().log().all();
+		
+		
+		
+		
 	}
 }
+ 
