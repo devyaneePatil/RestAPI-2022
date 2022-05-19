@@ -15,13 +15,15 @@ public class UIKeywords {
 		if (browserName.equalsIgnoreCase("chrome")) {
 			WebDriverManager.chromedriver().setup();
 			driver = new ChromeDriver();
+			driver.manage().window().maximize();
 		} else if (browserName.equalsIgnoreCase("ie")) {
 			WebDriverManager.iedriver().setup();
 			driver = new InternetExplorerDriver();
-
+			driver.manage().window().maximize();
 		} else if (browserName.equalsIgnoreCase("firefox")) {
 			WebDriverManager.firefoxdriver().setup();
 			driver = new FirefoxDriver();
+			driver.manage().window().maximize();
 		} else {
 			System.err.println("Invalid browser name: " + browserName);
 		}
@@ -29,12 +31,15 @@ public class UIKeywords {
 	}
 
 	public static String getTitle() {
+		System.out.println("Your title : ");
 		return driver.getTitle();
 
 	}
 
 	public static void launchUrl(String url) {
+		System.out.println("Your url launched");
 		driver.get(url);
+
 	}
 
 	/**
@@ -48,12 +53,56 @@ public class UIKeywords {
 		element.sendKeys(textToEnter);
 	}
 
+	/**
+	 * @param by
+	 * @param TextToEnter
+	 */
+	@Deprecated
 	public static void enterText(By by, String TextToEnter) {
 		driver.findElement(by).sendKeys(TextToEnter);
+	}
+
+	@Deprecated
+	public static void enterText(String locatorValue, String textToEnter) {
+		driver.findElement(By.cssSelector(locatorValue)).sendKeys(textToEnter);
+	}
+
+	public static void enterText(String locatorValue, String loctorType, String textToEnter) {
+		getWebElement(loctorType, locatorValue).sendKeys(textToEnter);
+	}
+
+	public static WebElement getWebElement(String locatorType, String locatorValue) {
+		if (locatorType.equalsIgnoreCase("xpath")) {
+			return driver.findElement(By.xpath(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("css")) {
+			return driver.findElement(By.cssSelector(locatorValue));
+
+		} else if (locatorType.equalsIgnoreCase("id")) {
+			return driver.findElement(By.id(locatorValue));
+		} else if (locatorType.equalsIgnoreCase("class")) {
+			return driver.findElement(By.className(locatorValue));
+		} else {
+			System.err.println("Invalid locator type : " + locatorType);
+		}
+		return null;
+	}
+
+	public static void click(String locatorValue, String locatorType) {
+		getWebElement(locatorType, locatorValue).click();
 
 	}
 
-	public static void enterText(String locatorValue, String textToEnter) {
-		driver.findElement(By.cssSelector(locatorValue)).sendKeys(textToEnter);
+	public static String click(String locator) {
+		String[] part = locator.split("##");
+		String part1 = part[0];
+		String part2 = part[1];
+		getWebElement(part1, part2).click();
+		return null;
+	}
+
+	public static void closeBrowser() {
+		driver.close();
+		System.out.println("Browser is Closed.");
+
 	}
 }
