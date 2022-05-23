@@ -11,4 +11,4 @@ public class GetAssignment {
 				.then().log().all();
 	}
 }
-//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
+//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
